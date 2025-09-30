@@ -67,10 +67,7 @@ pid_t	*ft_fork_children(t_dat *d, char ***cmd, int **fd)
 		}
 		pids[i] = fork();
 		if (pids[i] == 0)
-		{
-			ft_set_child_signals();
-			ft_child_process(d, cmd, fd, i);
-		}
+			(ft_set_child_signals(), ft_child_process(d, cmd, fd, i));
 		else if (pids[i] < 0)
 			perror("fork");
 		i++;

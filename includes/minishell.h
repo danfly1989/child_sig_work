@@ -188,7 +188,6 @@ void							ft_close_pipes(int **fd, int tot);
 void							ft_wait_children(int tot);
 void							ft_execute_pipeline(t_dat *d, char ***cmd);
 int								ft_parse_redirection(char **tokens, t_rdr *r);
-int								ft_redir_in(char *file);
 int								ft_apply_redirections(t_rdr *r, char **tokens);
 int								ft_remove_redirections(char ***tokens_ptr,
 									int i, int j);

@@ -88,15 +88,15 @@ void	ft_nested_child(t_dat *d, char **cmd, char *cmd_path, int s_stdin)
 	exit(1);
 }
 
-// The  1st message here will occur in the case of a child
-// of a child (grandchild) terminating due to SIGQUIT
-void	ft_wait_children(int tot)
+void	ft_wait_children(pid_t *pids, int tot, int last_index)
 {
 	int	status;
 	int	i;
 	int	signal_num;
 	int	last_exit_code;
 
+	(void)pids;
+	last_index++;
 	last_exit_code = 0;
 	i = 0;
 	while (i < tot)

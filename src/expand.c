@@ -43,9 +43,9 @@ void	*ft_free_error_expanded(char **expanded, int i)
 	return (NULL);
 }
 
-/*The static helper fill expan grew too large. The interior else
-statement was moved here, taking the address of the d_dat struct
-to work on it directly */
+/*Filters empty tokens (except qtype 2). Compacts by copying from
+expanded[d->i] to expanded[d->j] to remove gaps. J will only increment
+if non empty (and retain relative value from caller function) */
 static void	expand_else(char **expanded, t_dat *d, int *qtypes)
 {
 	if (expanded[d->i] && expanded[d->i][0] == '\0' && qtypes[d->i] != 2)
@@ -59,6 +59,9 @@ static void	expand_else(char **expanded, t_dat *d, int *qtypes)
 	}
 }
 
+/*Builds final array: qtype 1 (single quotes) copied from original tokens
+(no expansion needed). Other types already expanded, now filtered/compacted
+by helper function */
 static char	**ft_fill_expanded(t_dat d, char **tokens, int *qtypes,
 		char **expanded)
 {

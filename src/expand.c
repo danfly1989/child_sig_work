@@ -43,9 +43,22 @@ void	*ft_free_error_expanded(char **expanded, int i)
 	return (NULL);
 }
 
-/*Keep single quotes literally
-drop unquoted empties (resolves Empty test)
-kepp/move if expanded*/
+/*The static helper fill expan grew too large. The interior else
+statement was moved here, taking the address of the d_dat struct
+to work on it directly */
+static void	expand_else(char **expanded, t_dat *d, int *qtypes)
+{
+	if (expanded[d->i] && expanded[d->i][0] == '\0' && qtypes[d->i] != 2)
+		(free(expanded[d->i]), expanded[d->i] = NULL);
+	else if (expanded[d->i])
+	{
+		expanded[d->j] = expanded[d->i];
+		if (d->j != d->i)
+			expanded[d->i] = NULL;
+		d->j++;
+	}
+}
+
 static char	**ft_fill_expanded(t_dat d, char **tokens, int *qtypes,
 		char **expanded)
 {
@@ -62,15 +75,7 @@ static char	**ft_fill_expanded(t_dat d, char **tokens, int *qtypes,
 		}
 		else
 		{
-			if (expanded[d.i] && expanded[d.i][0] == '\0' && qtypes[d.i] != 2)
-				(free(expanded[d.i]), expanded[d.i] = NULL);
-			else if (expanded[d.i])
-			{
-				expanded[d.j] = expanded[d.i];
-				if (d.j != d.i)
-					expanded[d.i] = NULL;
-				d.j++;
-			}
+			expand_else(expanded, &d, qtypes);
 		}
 		d.i++;
 	}

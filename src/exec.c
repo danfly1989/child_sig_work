@@ -12,23 +12,27 @@
 
 #include "minishell.h"
 
+static int	find_last_index(t_dat *d, char ***cmd)
+{
+	int	i;
+
+	i = d->tot - 1;
+	while (i >= 0)
+	{
+		if (cmd[i] && cmd[i][0])
+			return (i);
+		i--;
+	}
+	return (-1);
+}
+
 void	ft_execute_pipeline(t_dat *d, char ***cmd)
 {
 	int		**fd;
 	pid_t	*pids;
 	int		last_index;
-	int		i;
 
-	// Find last non-empty command index
-	last_index = -1;
-	for (i = d->tot - 1; i >= 0; i--)
-	{
-		if (cmd[i] && cmd[i][0])
-		{
-			last_index = i;
-			break ;
-		}
-	}
+	last_index = find_last_index(d, cmd);
 	if (last_index == -1)
 		return ;
 	if (ft_strcmp(cmd[0][0], "./minishell") == 0)

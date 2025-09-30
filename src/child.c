@@ -90,9 +90,9 @@ void	ft_nested_child(t_dat *d, char **cmd, char *cmd_path, int s_stdin)
 
 void	ft_wait_children(pid_t *pids, int tot, int last_index)
 {
-	int status;
-	int i;
-	pid_t pid;
+	int		status;
+	int		i;
+	pid_t	pid;
 
 	i = 0;
 	while (i < tot)

@@ -90,31 +90,24 @@ void	ft_nested_child(t_dat *d, char **cmd, char *cmd_path, int s_stdin)
 
 void	ft_wait_children(pid_t *pids, int tot, int last_index)
 {
-	int	status;
-	int	i;
-	int	signal_num;
-	int	last_exit_code;
+	int status;
+	int i;
+	pid_t pid;
 
-	(void)pids;
-	last_index++;
-	last_exit_code = 0;
 	i = 0;
 	while (i < tot)
 	{
-		signal(SIGINT, SIG_IGN);
-		waitpid(-1, &status, 0);
-		if (WIFSIGNALED(status))
+		if (pids[i] != -1)
 		{
-			signal_num = WTERMSIG(status);
-			if (signal_num == SIGQUIT)
-				(printf("quit: core dumped\n"), last_exit_code = 131);
-			else if (signal_num == SIGINT)
-				(write(1, "\n", 1), last_exit_code = 130);
+			pid = waitpid(pids[i], &status, 0);
+			if (pid == pids[last_index])
+			{
+				if (WIFEXITED(status))
+					g_last_exit_status = WEXITSTATUS(status);
+				else if (WIFSIGNALED(status))
+					g_last_exit_status = 128 + WTERMSIG(status);
+			}
 		}
-		else if (WIFEXITED(status))
-			last_exit_code = WEXITSTATUS(status);
 		i++;
 	}
-	ft_set_main_signals();
-	g_last_exit_status = last_exit_code;
 }

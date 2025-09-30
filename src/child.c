@@ -45,29 +45,37 @@ void	ft_child_process(t_dat *d, char ***cmd, int **fd, size_t i)
 	ft_exec_command(d, cmd[i]);
 }
 
-void	ft_fork_children(t_dat *d, char ***cmd, int **fd)
+/*Modified to collect an array of children in order to provide
+accurate child info to wait children and consistently get the
+correct last signal pid.*/
+pid_t	*ft_fork_children(t_dat *d, char ***cmd, int **fd)
 {
-	pid_t	pid;
+	pid_t	*pids;
 	size_t	i;
 
+	pids = malloc(sizeof(pid_t) * d->tot);
+	if (!pids)
+		return (NULL);
 	i = 0;
 	while (i < d->tot)
 	{
+		pids[i] = -1;
 		if (!cmd[i] || !cmd[i][0])
 		{
 			i++;
 			continue ;
 		}
-		pid = fork();
-		if (pid == 0)
+		pids[i] = fork();
+		if (pids[i] == 0)
 		{
 			ft_set_child_signals();
 			ft_child_process(d, cmd, fd, i);
 		}
-		else if (pid < 0)
+		else if (pids[i] < 0)
 			perror("fork");
 		i++;
 	}
+	return (pids);
 }
 
 void	ft_nested_child(t_dat *d, char **cmd, char *cmd_path, int s_stdin)

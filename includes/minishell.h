@@ -182,7 +182,7 @@ void							ft_child_process(t_dat *d, char ***cmd,
 int								ft_syntax_error_msg(char *token);
 int								ft_validate_segment(char **tokens, int start,
 									int end);
-void							ft_fork_children(t_dat *d, char ***cmd,
+pid_t							*ft_fork_children(t_dat *d, char ***cmd,
 									int **fd);
 void							ft_close_pipes(int **fd, int tot);
 void							ft_wait_children(int tot);
